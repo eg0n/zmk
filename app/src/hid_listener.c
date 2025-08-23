@@ -51,6 +51,7 @@ static int hid_listener_keycode_pressed(const struct zmk_keycode_state_changed *
                     err);
         }
     }
+    raise_zmk_modifiers_state_changed((struct zmk_modifiers_state_changed){.modifiers = explicit_mods_changed | implicit_mods_changed, .state = true});
 
     return zmk_endpoints_send_report(ev->usage_page);
 }
@@ -93,6 +94,7 @@ static int hid_listener_keycode_released(const struct zmk_keycode_state_changed 
                     err);
         }
     }
+    raise_zmk_modifiers_state_changed((struct zmk_modifiers_state_changed){.modifiers = explicit_mods_changed | implicit_mods_changed, .state = false});
     return zmk_endpoints_send_report(ev->usage_page);
 }
 
