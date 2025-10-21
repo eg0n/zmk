@@ -6,19 +6,20 @@
 
 #define DT_DRV_COMPAT zmk_behavior_caps_word
 
-#include <zephyr/device.h>
 #include <drivers/behavior.h>
+#include <zephyr/device.h>
 #include <zephyr/logging/log.h>
 #include <zmk/behavior.h>
 
 #include <zmk/endpoints.h>
 #include <zmk/event_manager.h>
-#include <zmk/events/position_state_changed.h>
+#include <zmk/events/caps_word_state_changed.h>
 #include <zmk/events/keycode_state_changed.h>
 #include <zmk/events/modifiers_state_changed.h>
-#include <zmk/keys.h>
+#include <zmk/events/position_state_changed.h>
 #include <zmk/hid.h>
 #include <zmk/keymap.h>
+#include <zmk/keys.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
@@ -44,12 +45,18 @@ static void activate_caps_word(const struct device *dev) {
     struct behavior_caps_word_data *data = dev->data;
 
     data->active = true;
+
+    raise_zmk_caps_word_state_changed(
+        (struct zmk_caps_word_state_changed){.active = true});
 }
 
 static void deactivate_caps_word(const struct device *dev) {
     struct behavior_caps_word_data *data = dev->data;
 
     data->active = false;
+
+    raise_zmk_caps_word_state_changed(
+        (struct zmk_caps_word_state_changed){.active = false});
 }
 
 static int on_caps_word_binding_pressed(struct zmk_behavior_binding *binding,
