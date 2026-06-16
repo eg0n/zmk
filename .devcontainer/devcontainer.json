@@ -1,10 +1,12 @@
 {
   "name": "ZMK Development",
-  "dockerFile": "Dockerfile",
+  "build": {
+    "dockerfile": "Dockerfile",
+  },
   "runArgs": ["--security-opt", "label=disable", "--userns=host"],
   "containerEnv": {
     "WORKSPACE_DIR": "${containerWorkspaceFolder}",
-    "PROMPT_COMMAND": "history -a"
+    "PROMPT_COMMAND": "history -a",
   },
   "mounts": [
     "type=volume,source=zmk-root-user,target=/root",
@@ -12,17 +14,17 @@
     "type=volume,source=zmk-modules,target=/workspaces/zmk-modules",
     "type=volume,source=zmk-zephyr,target=${containerWorkspaceFolder}/zephyr",
     "type=volume,source=zmk-zephyr-modules,target=${containerWorkspaceFolder}/modules",
-    "type=volume,source=zmk-zephyr-tools,target=${containerWorkspaceFolder}/tools"
+    "type=volume,source=zmk-zephyr-tools,target=${containerWorkspaceFolder}/tools",
   ],
   "customizations": {
     "vscode": {
       "extensions": ["ms-vscode.cpptools"],
       "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-      }
-    }
+        "terminal.integrated.shell.linux": "/bin/bash",
+      },
+    },
   },
   "forwardPorts": [3000],
   "remoteUser": "root",
-  "containerUser": "root"
+  "containerUser": "root",
 }
