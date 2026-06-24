@@ -370,6 +370,67 @@ config ZMK_BACKLIGHT_AUTO_OFF_USB
 
 endif # ZMK_BACKLIGHT
 
+
+menuconfig ZMK_AMBIENT_LIGHT
+    bool "Ambient light sensor service"
+    depends on SENSOR
+    help
+      Periodically samples an ambient light sensor and exposes the
+      current lux reading via zmk_ambient_light_get_lux() and a
+      callback API.  The sensor must be aliased as "zmk-als" in
+      devicetree and must support SENSOR_CHAN_LIGHT.
+
+      Tested hardware: APDS9960 (already present on the dongle screen
+      shield overlay for seeeduino_xiao_ble).
+
+if ZMK_AMBIENT_LIGHT
+
+config ZMK_AMBIENT_LIGHT_POLL_INTERVAL_MS
+    int "Sensor poll interval (milliseconds)"
+    default 2000
+    range 100 60000
+
+config ZMK_AMBIENT_LIGHT_STARTUP_DELAY_MS
+    int "Startup delay before first sample (milliseconds)"
+    default 500
+    range 0 10000
+
+config ZMK_AMBIENT_LIGHT_MAX_CALLBACKS
+    int "Maximum number of registered lux-update callbacks"
+    default 4
+    range 1 16
+
+config ZMK_AMBIENT_LIGHT_LOG_LEVEL
+    int "Log level for the ambient light service"
+    default 1
+    range 0 4
+
+config ZMK_AMBIENT_LIGHT_LUX_GAMMA
+    int "Brightness curve gamma exponent"
+    default 2
+    range 1 4
+    help
+      Controls how aggressively the lux-to-brightness curve bends toward
+      dim at low light levels.
+
+      The normalized log2 position t ∈ [0,1] is raised to this power
+      before being mapped to brightness:
+
+        brightness = min + (t ^ gamma) × (max - min)
+
+      gamma=1  linear-in-log (too bright at low lux for most sensors)
+      gamma=2  quadratic — good default; halves brightness at mid lux
+      gamma=3  cubic — darker at low lux, brighter ramp near lux_max
+      gamma=4  very dark at low lux; useful if sensor is behind plastic
+
+      With lux_max=15360 and min=10% max=100%:
+        lux    gamma=1  gamma=2  gamma=3  gamma=4
+        100      52%      30%      20%      15%
+        500      69%      53%      41%      32%
+        5000     87%      76%      67%      58%
+
+endif # ZMK_AMBIENT_LIGHT
+
 endmenu # Display/LED Options
 
 rsource "src/pointing/Kconfig"
