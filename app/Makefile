@@ -43,14 +43,14 @@ all: totem corne
 
 # --- Totem Build Target ---
 totem:
-	$(call build_zmk,seeeduino_xiao_ble,totem_left rgbled_adapter,totem/left,$(TOTEM_MODULES),$(TOTEM_KEYMAP_FLAGS))
-	$(call build_zmk,seeeduino_xiao_ble,totem_right rgbled_adapter,totem/right,$(TOTEM_MODULES),$(TOTEM_KEYMAP_FLAGS))
-	$(call build_zmk,seeeduino_xiao_ble,totem_dongle dongle_screen,totem/dongle,$(TOTEM_MODULES),$(TOTEM_KEYMAP_FLAGS))
+	$(call build_zmk,xiao_ble//zmk,totem_left rgbled_adapter,totem/left,$(TOTEM_MODULES),$(TOTEM_KEYMAP_FLAGS))
+	$(call build_zmk,xiao_ble//zmk,totem_right rgbled_adapter,totem/right,$(TOTEM_MODULES),$(TOTEM_KEYMAP_FLAGS))
+	$(call build_zmk,xiao_ble//zmk,totem_dongle dongle_screen,totem/dongle,$(TOTEM_MODULES),$(TOTEM_KEYMAP_FLAGS))
 
 # --- Corne Build Target ---
 corne:
-	$(call build_zmk,nice_nano_v2,corne_left nice_view_adapter nice_view_gem,corne/left,$(CORNE_MODULES),$(CORNE_KEYMAP_FLAGS))
-	$(call build_zmk,nice_nano_v2,corne_right nice_view_adapter nice_view_gem,corne/right,$(CORNE_MODULES),$(CORNE_KEYMAP_FLAGS))
+	$(call build_zmk,nice_nano//zmk,corne_left nice_view_adapter nice_view_gem,corne/left,$(CORNE_MODULES),$(CORNE_KEYMAP_FLAGS))
+	$(call build_zmk,nice_nano//zmk,corne_right nice_view_adapter nice_view_gem,corne/right,$(CORNE_MODULES),$(CORNE_KEYMAP_FLAGS))
 
 clean:
 	@rm -rf build
