@@ -688,6 +688,20 @@ config FPU
 config ZMK_WPM
     bool "Calculate WPM"
 
+if ZMK_WPM
+
+config ZMK_WPM_UPDATE_INTERVAL_MS
+    int "How often WPM is recalculated, in milliseconds"
+    range 50 5000
+    default 250
+
+config ZMK_WPM_WINDOW_MS
+    int "How far back WPM is averaged, in milliseconds; a multiple of the update interval"
+    range 1000 60000
+    default 5000
+
+endif
+
 config ZMK_KEYMAP_SENSORS
     bool "Enable Keymap Sensors support"
     default y

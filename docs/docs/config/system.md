@@ -13,12 +13,14 @@ Definition file: [zmk/app/Kconfig](https://github.com/zmkfirmware/zmk/blob/main/
 
 ### General
 
-| Config                      | Type   | Description                                                                                                                                    | Default |
-| --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `CONFIG_ZMK_BOARD_COMPAT`   | bool   | A special config for boards to enable. This helps check if users have accidentally used an upstream Zephyr board without ZMK additions applied | n       |
-| `CONFIG_ZMK_KEYBOARD_NAME`  | string | The name of the keyboard (max 16 characters)                                                                                                   |         |
-| `CONFIG_ZMK_WPM`            | bool   | Enable calculating words per minute                                                                                                            | n       |
-| `CONFIG_HEAP_MEM_POOL_SIZE` | int    | Size of the heap memory pool                                                                                                                   | 8192    |
+| Config                              | Type   | Description                                                                                                                                    | Default |
+| ----------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `CONFIG_ZMK_BOARD_COMPAT`           | bool   | A special config for boards to enable. This helps check if users have accidentally used an upstream Zephyr board without ZMK additions applied | n       |
+| `CONFIG_ZMK_KEYBOARD_NAME`          | string | The name of the keyboard (max 16 characters)                                                                                                   |         |
+| `CONFIG_ZMK_WPM`                    | bool   | Enable calculating words per minute                                                                                                            | n       |
+| `CONFIG_ZMK_WPM_UPDATE_INTERVAL_MS` | int    | How often words per minute is recalculated, in milliseconds                                                                                    | 250     |
+| `CONFIG_ZMK_WPM_WINDOW_MS`          | int    | How far back words per minute is averaged, in milliseconds; a multiple of the update interval                                                  | 5000    |
+| `CONFIG_HEAP_MEM_POOL_SIZE`         | int    | Size of the heap memory pool                                                                                                                   | 8192    |
 
 :::info
 
