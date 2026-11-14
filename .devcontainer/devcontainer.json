@@ -1,6 +1,11 @@
 {
   "name": "ZMK Development",
-  "dockerFile": "Dockerfile",
+  // Zed only understands the modern `build.dockerfile` form. The legacy
+  // top-level `"dockerFile"` key that upstream ZMK ships is silently ignored,
+  // leaving Zed with no build config at all.
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
   "runArgs": ["--security-opt", "label=disable"],
   "containerEnv": {
     "WORKSPACE_DIR": "${containerWorkspaceFolder}",
