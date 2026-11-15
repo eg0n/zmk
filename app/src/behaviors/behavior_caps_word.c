@@ -41,19 +41,27 @@ struct behavior_caps_word_data {
     bool active;
 };
 
-static void activate_caps_word(const struct device *dev) {
+// How many instances are on. The event says whether any is, so one instance turning off
+// doesn't report caps word as off while another is still on.
+static uint8_t active_count;
+
+static void set_caps_word_active(const struct device *dev, bool active) {
     struct behavior_caps_word_data *data = dev->data;
 
-    data->active = true;
-    raise_zmk_caps_word_state_changed((struct zmk_caps_word_state_changed){.active = true});
+    if (data->active == active) {
+        return;
+    }
+    data->active = active;
+
+    active_count += active ? 1 : -1;
+    if (active_count == (active ? 1 : 0)) {
+        raise_zmk_caps_word_state_changed((struct zmk_caps_word_state_changed){.active = active});
+    }
 }
 
-static void deactivate_caps_word(const struct device *dev) {
-    struct behavior_caps_word_data *data = dev->data;
+static void activate_caps_word(const struct device *dev) { set_caps_word_active(dev, true); }
 
-    data->active = false;
-    raise_zmk_caps_word_state_changed((struct zmk_caps_word_state_changed){.active = false});
-}
+static void deactivate_caps_word(const struct device *dev) { set_caps_word_active(dev, false); }
 
 static int on_caps_word_binding_pressed(struct zmk_behavior_binding *binding,
                                         struct zmk_behavior_binding_event event) {
