@@ -42,6 +42,9 @@ static uint16_t current_interval;
 static uint32_t window_count;
 // Intervals since typing resumed, up to the window's length.
 static uint16_t intervals_elapsed;
+// When the next update is due. Updates are scheduled against this, not against when the last
+// one ran, so a late update doesn't stretch the intervals that elapsed time is counted in.
+static int64_t next_update_ms;
 static struct k_spinlock lock;
 
 int zmk_wpm_get_state(void) { return wpm_state; }
@@ -59,7 +62,9 @@ int wpm_event_listener(const zmk_event_t *eh) {
         }
         LOG_DBG("window_count %d keycode %d", window_count, ev->keycode);
         // Starts the updates after a pause; while they run, this does nothing.
-        k_work_schedule(&wpm_work, K_MSEC(WPM_INTERVAL_MS));
+        if (k_work_schedule(&wpm_work, K_MSEC(WPM_INTERVAL_MS)) == 1) {
+            next_update_ms = k_uptime_get() + WPM_INTERVAL_MS;
+        }
     }
     return 0;
 }
@@ -92,7 +97,8 @@ static void wpm_work_handler(struct k_work *work) {
 
     // Idle: no updates until the next key.
     if (!idle) {
-        k_work_schedule(&wpm_work, K_MSEC(WPM_INTERVAL_MS));
+        next_update_ms += WPM_INTERVAL_MS;
+        k_work_schedule(&wpm_work, K_TIMEOUT_ABS_MS(next_update_ms));
     }
 }
 
